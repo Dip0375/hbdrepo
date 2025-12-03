@@ -1,4 +1,4 @@
-# 🎂 Happy Birthday Nishi! 🎉
+# 🎂 Happy Birthday 🎉
 
 A beautiful, animated birthday celebration page with OLED TV slideshow, photo frames, and interactive elements!
 
