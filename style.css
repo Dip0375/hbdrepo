@@ -1,0 +1,1235 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: #fff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Canvas Background */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Start Screen */
+#startScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+}
+
+#startScreen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.start-content {
+    text-align: center;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.start-content h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+.start-content p {
+    font-size: 5rem;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Main Content */
+#mainContent {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+}
+
+#mainContent.hidden {
+    display: none;
+}
+
+/* Birthday Header */
+.birthday-header {
+    text-align: center;
+    padding: 2rem 1rem;
+    animation: fadeInDown 1s ease;
+}
+
+.birthday-header h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4.5rem;
+    margin: 0;
+}
+
+/* Main Container - Two Column Layout */
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 4rem;
+    min-height: 80vh;
+}
+
+.left-section {
+    flex: 1;
+    max-width: 900px;
+    animation: slideInLeft 1s ease;
+}
+
+.right-section {
+    flex: 1;
+    max-width: 600px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.right-section.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Canvas Background - Darker for better visibility */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(26, 26, 46, 0.3) 0%, rgba(15, 52, 96, 0.5) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Fire Effect - Eye-catching White with Rainbow Glow */
+.fire {
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 
+        0 0 20px #ff00ff,
+        0 0 40px #ff00ff,
+        0 0 60px #00ffff,
+        0 0 80px #00ffff,
+        0 0 100px #ffff00,
+        0 0 120px #ff00ff,
+        5px 5px 10px rgba(0, 0, 0, 0.8);
+    animation: fireAnimation 3s ease-in-out infinite;
+}
+
+@keyframes fireAnimation {
+    0% {
+        text-shadow: 
+            0 0 20px #ff00ff,
+            0 0 40px #ff00ff,
+            0 0 60px #00ffff,
+            0 0 80px #00ffff,
+            0 0 100px #ffff00,
+            0 0 120px #ff00ff,
+            5px 5px 10px rgba(0, 0, 0, 0.8);
+    }
+    33% {
+        text-shadow: 
+            0 0 20px #00ffff,
+            0 0 40px #00ffff,
+            0 0 60px #ffff00,
+            0 0 80px #ffff00,
+            0 0 100px #ff00ff,
+            0 0 120px #00ffff,
+            5px 5px 10px rgba(0, 0, 0, 0.8);
+    }
+    66% {
+        text-shadow: 
+            0 0 20px #ffff00,
+            0 0 40px #ffff00,
+            0 0 60px #ff00ff,
+            0 0 80px #ff00ff,
+            0 0 100px #00ffff,
+            0 0 120px #ffff00,
+            5px 5px 10px rgba(0, 0, 0, 0.8);
+    }
+    100% {
+        text-shadow: 
+            0 0 20px #ff00ff,
+            0 0 40px #ff00ff,
+            0 0 60px #00ffff,
+            0 0 80px #00ffff,
+            0 0 100px #ffff00,
+            0 0 120px #ff00ff,
+            5px 5px 10px rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* OLED TV Display */
+.oled-tv {
+    margin: 2rem auto 3rem;
+    max-width: 900px;
+    width: 100%;
+    animation: fadeInUp 1.5s ease;
+}
+
+.tv-frame {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+.tv-screen {
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16 / 9;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(0, 255, 255, 0.3);
+}
+
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background: #000;
+}
+
+.slide-placeholder {
+    font-size: 6rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    color: #fff;
+    text-align: center;
+}
+
+.tv-stand {
+    width: 200px;
+    height: 15px;
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    margin: 0 auto;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.tv-base {
+    width: 250px;
+    height: 8px;
+    background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.tv-label {
+    text-align: center;
+    margin-top: 1rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+}
+
+/* Play Button Overlay */
+.play-button-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
+}
+
+.play-button-overlay:hover .play-button {
+    transform: scale(1.1);
+}
+
+.play-button {
+    text-align: center;
+    transition: transform 0.3s ease;
+    animation: playPulse 2s ease-in-out infinite;
+}
+
+.play-button svg {
+    filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.8));
+    transition: filter 0.3s ease;
+}
+
+.play-button:hover svg {
+    filter: drop-shadow(0 0 30px rgba(0, 255, 255, 1));
+}
+
+.play-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    color: #00ffff;
+    margin-top: 1rem;
+    text-shadow: 0 0 15px #00ffff;
+}
+
+@keyframes playPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Pause/Resume Button */
+.pause-resume-button {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    z-index: 101;
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.7;
+}
+
+.pause-resume-button:hover {
+    transform: scale(1.15);
+    opacity: 1;
+}
+
+.pause-resume-button svg {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.6));
+    transition: filter 0.3s ease;
+}
+
+.pause-resume-button:hover svg {
+    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 1));
+}
+
+/* Birthday Wish Slide */
+.wish-slide {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+}
+
+.birthday-wish-content {
+    text-align: center;
+    padding: 2rem;
+    animation: wishAppear 1s ease-in-out;
+}
+
+.wish-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3.5rem;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    text-shadow: 
+        0 0 20px #ff00ff,
+        0 0 40px #ff00ff,
+        0 0 60px #00ffff,
+        0 0 80px #00ffff;
+    animation: wishGlow 2s ease-in-out infinite;
+}
+
+.wish-name {
+    font-family: 'Dancing Script', cursive;
+    font-size: 5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 1rem 0;
+    text-shadow: 
+        0 0 30px #ffff00,
+        0 0 50px #ffff00,
+        0 0 70px #ff00ff,
+        0 0 90px #00ffff;
+    animation: wishGlow 2s ease-in-out infinite 0.5s;
+}
+
+.wish-emojis {
+    font-size: 3rem;
+    margin: 1.5rem 0;
+    animation: emojiFloat 3s ease-in-out infinite;
+}
+
+.wish-message {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-top: 1rem;
+    text-shadow: 0 0 15px #00ffff;
+    animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes wishAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes wishGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 20px #ff00ff,
+            0 0 40px #ff00ff,
+            0 0 60px #00ffff,
+            0 0 80px #00ffff;
+    }
+    50% {
+        text-shadow: 
+            0 0 30px #ffff00,
+            0 0 50px #ffff00,
+            0 0 70px #ff00ff,
+            0 0 90px #00ffff;
+    }
+}
+
+@keyframes emojiFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Scroll Down Indicator - Simple */
+.scroll-indicator {
+    text-align: center;
+    padding: 2rem;
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    position: relative;
+    z-index: 100;
+}
+
+.scroll-indicator.show {
+    opacity: 1;
+}
+
+.scroll-indicator p {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #00ffff;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 15px #00ffff;
+}
+
+.arrow-down {
+    animation: arrowBounce 1.5s ease-in-out infinite;
+}
+
+.arrow-down svg {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.8));
+    width: 50px;
+    height: 50px;
+}
+
+@keyframes arrowBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(15px);
+    }
+}
+
+/* Poem Section */
+.poem-section {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Birthday Cake */
+.cake-container {
+    padding: 2rem;
+    position: relative;
+}
+
+.cake {
+    position: relative;
+    margin: 0 auto 2rem;
+    width: 350px;
+    animation: fadeInUp 1.5s ease, cakePulse 3s ease-in-out infinite 2s;
+}
+
+@keyframes cakePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.candles {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 10;
+}
+
+.candle {
+    position: relative;
+    width: 12px;
+    height: 60px;
+    background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.candle:hover {
+    transform: scale(1.1);
+}
+
+.wick {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: #333;
+}
+
+.flame {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 30px;
+    background: radial-gradient(ellipse at center, #fff 0%, #ffeb3b 20%, #ff9800 50%, #ff5722 80%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 0.3s ease-in-out infinite alternate;
+    box-shadow: 0 0 20px #ff9800, 0 0 30px #ff5722;
+}
+
+.candle.blown-out .flame {
+    display: none;
+}
+
+.candle.blown-out {
+    opacity: 0.7;
+}
+
+@keyframes flicker {
+    0% {
+        transform: translateX(-50%) scale(1) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) scale(1.05) translateY(-2px);
+        opacity: 0.9;
+    }
+}
+
+.cake-layer {
+    margin: 0 auto;
+    border-radius: 8px;
+    position: relative;
+}
+
+/* Top Layer - Pink Frosting */
+.top-layer {
+    width: 200px;
+    height: 50px;
+    background: linear-gradient(180deg, #ffb3d9 0%, #ff85c0 50%, #ff6ba8 100%);
+    border-radius: 8px;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.top-layer::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    right: 15px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+}
+
+.top-layer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 10%, 
+        transparent 20%,
+        rgba(255, 255, 255, 0.3) 30%, 
+        transparent 40%,
+        rgba(255, 255, 255, 0.3) 50%, 
+        transparent 60%,
+        rgba(255, 255, 255, 0.3) 70%, 
+        transparent 80%,
+        rgba(255, 255, 255, 0.3) 90%, 
+        transparent 100%);
+    border-radius: 0 0 8px 8px;
+}
+
+/* Middle Layer - Yellow Frosting */
+.middle-layer {
+    width: 260px;
+    height: 60px;
+    background: linear-gradient(180deg, #ffe8b3 0%, #ffd98f 50%, #ffcc6b 100%);
+    border-radius: 8px;
+    box-shadow: 
+        0 5px 10px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    margin-top: -5px;
+    position: relative;
+}
+
+.middle-layer::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+}
+
+.middle-layer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 8%, 
+        transparent 16%,
+        rgba(255, 255, 255, 0.3) 24%, 
+        transparent 32%,
+        rgba(255, 255, 255, 0.3) 40%, 
+        transparent 48%,
+        rgba(255, 255, 255, 0.3) 56%, 
+        transparent 64%,
+        rgba(255, 255, 255, 0.3) 72%, 
+        transparent 80%,
+        rgba(255, 255, 255, 0.3) 88%, 
+        transparent 96%);
+    border-radius: 0 0 8px 8px;
+}
+
+/* Bottom Layer - Blue Frosting */
+.bottom-layer {
+    width: 320px;
+    height: 70px;
+    background: linear-gradient(180deg, #a8d8ff 0%, #7ec8ff 50%, #4db8ff 100%);
+    border-radius: 8px;
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+    margin-top: -5px;
+    position: relative;
+}
+
+.bottom-layer::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 25px;
+    right: 25px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
+}
+
+.bottom-layer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.3) 7%, 
+        transparent 14%,
+        rgba(255, 255, 255, 0.3) 21%, 
+        transparent 28%,
+        rgba(255, 255, 255, 0.3) 35%, 
+        transparent 42%,
+        rgba(255, 255, 255, 0.3) 49%, 
+        transparent 56%,
+        rgba(255, 255, 255, 0.3) 63%, 
+        transparent 70%,
+        rgba(255, 255, 255, 0.3) 77%, 
+        transparent 84%,
+        rgba(255, 255, 255, 0.3) 91%, 
+        transparent 98%);
+    border-radius: 0 0 8px 8px;
+}
+
+/* Cake Plate */
+.cake-plate {
+    width: 380px;
+    height: 15px;
+    background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 50%, #b8b8b8 100%);
+    border-radius: 50%;
+    margin: -5px auto 0;
+    box-shadow: 
+        0 5px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes layerGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.1);
+    }
+}
+
+.blow-instruction {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: #ffff00;
+    margin-top: 1rem;
+    animation: bounce 2s ease-in-out infinite;
+    text-shadow: 0 0 10px #ffff00;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Birthday Poem */
+.birthday-poem {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin: 3rem auto;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(255, 0, 255, 0.3);
+    animation: fadeInUp 2s ease;
+    border: 3px solid rgba(255, 0, 255, 0.5);
+}
+
+.birthday-poem h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    color: #ffff00;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 20px #ffff00;
+    text-align: center;
+}
+
+.poem-content {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #fff;
+    text-align: center;
+}
+
+.poem-content p {
+    margin: 0.3rem 0;
+    animation: fadeIn 0.8s ease forwards;
+    opacity: 0;
+    text-align: center;
+}
+
+.poem-content p:nth-child(1) { animation-delay: 0.2s; }
+.poem-content p:nth-child(2) { animation-delay: 0.4s; }
+.poem-content p:nth-child(3) { animation-delay: 0.6s; }
+.poem-content p:nth-child(4) { animation-delay: 0.8s; }
+.poem-content p:nth-child(6) { animation-delay: 1s; }
+.poem-content p:nth-child(7) { animation-delay: 1.2s; }
+.poem-content p:nth-child(8) { animation-delay: 1.4s; }
+.poem-content p:nth-child(9) { animation-delay: 1.6s; }
+
+.poem-signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #00ffff;
+    font-weight: bold;
+    margin-top: 1rem;
+    animation-delay: 2s !important;
+    text-shadow: 0 0 15px #00ffff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50px) rotateY(-20deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) rotateY(0);
+    }
+}
+
+@keyframes slideInFrame {
+    from {
+        opacity: 0;
+        transform: translateY(30px) rotate(-5deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(-2deg);
+    }
+}
+
+/* Responsive Design */
+
+/* Tablet View (768px - 1200px) */
+@media (max-width: 1200px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+    
+    .left-section, .right-section {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .birthday-header h1 {
+        font-size: 4rem;
+    }
+    
+    .oled-tv {
+        max-width: 95%;
+    }
+    
+    .cake {
+        transform: scale(0.95);
+    }
+    
+    .scroll-indicator {
+        padding: 1.5rem;
+    }
+    
+    .scroll-indicator p {
+        font-size: 1.6rem;
+    }
+    
+    .arrow-down svg {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Mobile View (up to 768px) */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+    
+    #mainContent {
+        padding: 1rem 0.5rem;
+    }
+    
+    .birthday-header {
+        padding: 1.5rem 0.5rem;
+    }
+    
+    .birthday-header h1 {
+        font-size: 2.8rem;
+        line-height: 1.2;
+    }
+    
+    .start-content h1 {
+        font-size: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .start-content p {
+        font-size: 4rem;
+    }
+    
+    .main-container {
+        padding: 0.5rem;
+        gap: 2rem;
+    }
+    
+    /* OLED TV Mobile */
+    .oled-tv {
+        max-width: 100%;
+        width: 100%;
+        margin: 1rem auto 2rem;
+    }
+    
+    .tv-frame {
+        padding: 15px;
+    }
+    
+    .tv-label {
+        font-size: 1.1rem;
+    }
+    
+    .play-button svg {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .play-text {
+        font-size: 1.2rem;
+    }
+    
+    .pause-resume-button svg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .slide-caption {
+        font-size: 1.2rem;
+        padding: 10px 15px;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+    }
+    
+    /* Birthday Wish Slide Mobile */
+    .wish-title {
+        font-size: 2.5rem;
+    }
+    
+    .wish-name {
+        font-size: 3.5rem;
+    }
+    
+    .wish-emojis {
+        font-size: 2.5rem;
+    }
+    
+    .wish-message {
+        font-size: 1.2rem;
+    }
+    
+    /* Cake Mobile */
+    .cake {
+        transform: scale(0.75);
+    }
+    
+    .blow-instruction {
+        font-size: 1.1rem;
+    }
+    
+    /* Scroll Indicator Mobile */
+    .scroll-indicator {
+        padding: 1.5rem 1rem;
+        margin: 1rem auto;
+    }
+    
+    .scroll-indicator p {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .arrow-down svg {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Poem Mobile */
+    .poem-section {
+        padding: 2rem 1rem;
+    }
+    
+    .birthday-poem {
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+    
+    .birthday-poem h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .poem-content {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .poem-signature {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small Mobile View (up to 480px) */
+@media (max-width: 480px) {
+    .birthday-header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .start-content h1 {
+        font-size: 1.5rem;
+    }
+    
+    .start-content p {
+        font-size: 3rem;
+    }
+    
+    .main-container {
+        padding: 0.25rem;
+        gap: 1.5rem;
+    }
+    
+    .tv-frame {
+        padding: 10px;
+    }
+    
+    .tv-label {
+        font-size: 1rem;
+    }
+    
+    .play-button svg {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .play-text {
+        font-size: 1rem;
+    }
+    
+    .slide-caption {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    
+    .wish-title {
+        font-size: 2rem;
+    }
+    
+    .wish-name {
+        font-size: 3rem;
+    }
+    
+    .wish-emojis {
+        font-size: 2rem;
+    }
+    
+    .wish-message {
+        font-size: 1rem;
+    }
+    
+    .cake {
+        transform: scale(0.6);
+    }
+    
+    .blow-instruction {
+        font-size: 1rem;
+    }
+    
+    .scroll-indicator {
+        padding: 1rem 0.5rem;
+    }
+    
+    .scroll-indicator p {
+        font-size: 1.2rem;
+    }
+    
+    .arrow-down svg {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .birthday-poem {
+        padding: 1rem;
+    }
+    
+    .birthday-poem h2 {
+        font-size: 1.5rem;
+    }
+    
+    .poem-content {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .poem-signature {
+        font-size: 1.3rem;
+    }
+}
+
+/* Landscape Mobile View */
+@media (max-width: 900px) and (orientation: landscape) {
+    .birthday-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .main-container {
+        min-height: auto;
+    }
+    
+    .cake {
+        transform: scale(0.7);
+    }
+    
+    .scroll-indicator {
+        padding: 1rem;
+    }
+    
+    .scroll-indicator p {
+        font-size: 1.4rem;
+    }
+    
+    .arrow-down svg {
+        width: 40px;
+        height: 40px;
+    }
+}

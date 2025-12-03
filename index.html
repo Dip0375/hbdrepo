@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Nishi! 🎂</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Background Canvas -->
+    <canvas id="canvas"></canvas>
+    
+    <!-- Click to Start -->
+    <div id="startScreen">
+        <div class="start-content">
+            <h1>🎉 Click to Celebrate 🎉</h1>
+            <p>�</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+        <!-- Birthday Header -->
+        <div class="birthday-header">
+            <h1 class="fire">Happy Birthday Nishi!</h1>
+        </div>
+
+        <!-- Main Content Container -->
+        <div class="main-container">
+            <!-- Left Side - OLED TV -->
+            <div class="left-section">
+                <div class="oled-tv">
+                    <div class="tv-frame">
+                        <div class="tv-screen">
+                            <div class="slideshow-container" id="slideshow">
+                                <!-- Slides will be added by JavaScript -->
+                            </div>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay" id="playButton">
+                                <div class="play-button">
+                                    <svg width="80" height="80" viewBox="0 0 80 80">
+                                        <circle cx="40" cy="40" r="38" fill="rgba(0, 255, 255, 0.3)" stroke="#00ffff" stroke-width="2"/>
+                                        <polygon points="30,20 30,60 60,40" fill="#00ffff"/>
+                                    </svg>
+                                    <p class="play-text">Click to Play</p>
+                                </div>
+                            </div>
+                            <!-- Pause/Resume Button -->
+                            <div class="pause-resume-button" id="pauseResumeButton" style="display: none;">
+                                <svg width="50" height="50" viewBox="0 0 50 50" id="pauseResumeIcon">
+                                    <g id="pauseIcon">
+                                        <circle cx="25" cy="25" r="24" fill="rgba(0, 0, 0, 0.5)" stroke="#00ffff" stroke-width="1.5"/>
+                                        <rect x="18" y="15" width="4" height="20" fill="#00ffff"/>
+                                        <rect x="28" y="15" width="4" height="20" fill="#00ffff"/>
+                                    </g>
+                                    <g id="resumeIcon" style="display: none;"></g>
+                                        <circle cx="25" cy="25" r="24" fill="rgba(0, 0, 0, 0.5)" stroke="#00ffff" stroke-width="1.5"/>
+                                        <polygon points="20,15 20,35 35,25" fill="#00ffff"/>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tv-stand"></div>
+                    <div class="tv-base"></div>
+                    <p class="tv-label">📺 Nishi's Memory Reel 📺</p>
+                </div>
+            </div>
+
+            <!-- Right Side - Birthday Cake -->
+            <div class="right-section">
+                <div class="cake-container">
+                    <div class="cake" id="birthdayCake">
+                        <!-- Candles -->
+                        <div class="candles" id="candles">
+                            <div class="candle" data-candle="1">
+                                <div class="flame"></div>
+                                <div class="wick"></div>
+                            </div>
+                            <div class="candle" data-candle="2">
+                                <div class="flame"></div>
+                                <div class="wick"></div>
+                            </div>
+                            <div class="candle" data-candle="3">
+                                <div class="flame"></div>
+                                <div class="wick"></div>
+                            </div>
+                        </div>
+                        <!-- Cake Layers -->
+                        <div class="cake-layer top-layer"></div>
+                        <div class="cake-layer middle-layer"></div>
+                        <div class="cake-layer bottom-layer"></div>
+                        <div class="cake-plate"></div>
+                    </div>
+                    <p class="blow-instruction">🌬️ Click the candles to blow them out! 🌬️</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-indicator">
+            <p>Scroll Down</p>
+            <div class="arrow-down">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <path d="M20 5 L20 30 M10 20 L20 30 L30 20" stroke="#00ffff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Birthday Poem Section -->
+        <div class="poem-section">
+            <div class="birthday-poem">
+                <h2>🌸 Birthday Poem for Nishi 🌸</h2>
+                <div class="poem-content">
+                    <p>Not just today, but every day too,</p>
+                    <p>I wish the brightest things for you.</p>
+                    <p>Sunshine, smiles, and skies so blue—</p>
+                    <p>Happiness in all you dream and do.</p>
+                    <br>
+                    <p>In your heart may joy always bloom,</p>
+                    <p>Nishi, may life forever be filled with room</p>
+                    <p>For love, for peace, for moments so sweet—</p>
+                    <p>A journey that feels completely complete.</p>
+                    <br>
+                    <p class="poem-signature">Happy Birthday, Nishi! 🌷✨</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
