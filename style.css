@@ -21,6 +21,53 @@ canvas {
     pointer-events: none;
 }
 
+/* Loading Screen */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    transition: opacity 0.5s ease;
+}
+
+#loadingScreen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(0, 255, 255, 0.2);
+    border-top: 5px solid #00ffff;
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #00ffff;
+    text-shadow: 0 0 15px #00ffff;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
 /* Start Screen */
 #startScreen {
     position: fixed;
@@ -68,12 +115,124 @@ canvas {
     }
 }
 
+/* Verification Screen */
+#verificationScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+#verificationScreen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.verification-content {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+}
+
+.verification-content h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+
+.verification-question {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+}
+
+.verification-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.verification-option {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.verification-option:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+}
+
+.verification-option.correct {
+    background: rgba(0, 255, 0, 0.3);
+    border-color: #00ff00;
+    animation: correctPulse 0.5s ease;
+}
+
+.verification-option.wrong {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #ff0000;
+    animation: shake 0.5s ease;
+}
+
+.verification-hint {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-style: italic;
+}
+
+@keyframes correctPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
 /* Main Content */
 #mainContent {
     position: relative;
     z-index: 10;
     min-height: 100vh;
-    padding: 2rem 1rem;
 }
 
 #mainContent.hidden {
@@ -101,14 +260,37 @@ canvas {
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem;
-    gap: 4rem;
+    gap: 2rem;
     min-height: 80vh;
+}
+
+/* Initially center the OLED display */
+.main-container.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 900px;
+    padding: 1rem;
+    min-height: auto;
+    gap: 0;
+}
+
+.main-container.centered .left-section {
+    max-width: 100%;
+    width: 100%;
+    flex: none;
+    animation: fadeInUp 1.5s ease;
+}
+
+.main-container.centered .right-section {
+    display: none !important;
 }
 
 .left-section {
     flex: 1;
     max-width: 900px;
-    animation: slideInLeft 1s ease;
 }
 
 .right-section {
@@ -377,29 +559,35 @@ body::before {
     }
 }
 
-/* Pause/Resume Button */
+/* Pause/Resume Button - Below Display */
 .pause-resume-button {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    z-index: 101;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.control-btn {
+    background: linear-gradient(145deg, #00ffff, #00cccc);
+    border: 2px solid #00ffff;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #000;
     cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0.7;
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+    transition: all 0.3s ease;
+    font-family: 'Raleway', sans-serif;
 }
 
-.pause-resume-button:hover {
-    transform: scale(1.15);
-    opacity: 1;
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 255, 255, 0.6);
+    background: linear-gradient(145deg, #00ffff, #00e6e6);
 }
 
-.pause-resume-button svg {
-    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.6));
-    transition: filter 0.3s ease;
-}
-
-.pause-resume-button:hover svg {
-    filter: drop-shadow(0 0 15px rgba(0, 255, 255, 1));
+.control-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0, 255, 255, 0.4);
 }
 
 /* Birthday Wish Slide */

@@ -3,31 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Nishi! 🎂</title>
+    <title>Celebrate</title>
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./style.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Raleway:wght@300;400;600&display=swap" as="style">
+    <link rel="preload" href="./script.js" as="script">
     <link rel="stylesheet" href="./style.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading celebration...</p>
+        </div>
+    </div>
+
     <!-- Background Canvas -->
     <canvas id="canvas"></canvas>
     
     <!-- Click to Start -->
-    <div id="startScreen">
+    <div id="startScreen" style="display: none;">
         <div class="start-content">
             <h1>🎉 Click to Celebrate 🎉</h1>
-            <p>�</p>
+            <p>🎊</p>
+        </div>
+    </div>
+
+    <!-- Verification Screen -->
+    <div id="verificationScreen" style="display: none;">
+        <div class="verification-content">
+            <h2>🤖 Verify You're Human</h2>
+            <p class="verification-question" id="verificationQuestion"></p>
+            <div class="verification-options" id="verificationOptions">
+                <!-- Options will be added by JavaScript -->
+            </div>
+            <p class="verification-hint">Click the correct answer to continue</p>
         </div>
     </div>
 
     <!-- Main Content -->
     <div id="mainContent" class="hidden">
-        <!-- Birthday Header -->
-        <div class="birthday-header">
+        <!-- Birthday Header - Hidden initially -->
+        <div class="birthday-header" id="birthdayHeader" style="display: none;">
             <h1 class="fire">Happy Birthday Nishi!</h1>
         </div>
 
         <!-- Main Content Container -->
-        <div class="main-container">
+        <div class="main-container" id="mainContainer">
             <!-- Left Side - OLED TV -->
             <div class="left-section">
                 <div class="oled-tv">
@@ -46,25 +70,19 @@
                                     <p class="play-text">Click to Play</p>
                                 </div>
                             </div>
-                            <!-- Pause/Resume Button -->
-                            <div class="pause-resume-button" id="pauseResumeButton" style="display: none;">
-                                <svg width="50" height="50" viewBox="0 0 50 50" id="pauseResumeIcon">
-                                    <g id="pauseIcon">
-                                        <circle cx="25" cy="25" r="24" fill="rgba(0, 0, 0, 0.5)" stroke="#00ffff" stroke-width="1.5"/>
-                                        <rect x="18" y="15" width="4" height="20" fill="#00ffff"/>
-                                        <rect x="28" y="15" width="4" height="20" fill="#00ffff"/>
-                                    </g>
-                                    <g id="resumeIcon" style="display: none;"></g>
-                                        <circle cx="25" cy="25" r="24" fill="rgba(0, 0, 0, 0.5)" stroke="#00ffff" stroke-width="1.5"/>
-                                        <polygon points="20,15 20,35 35,25" fill="#00ffff"/>
-                                    </g>
-                                </svg>
-                            </div>
                         </div>
                     </div>
                     <div class="tv-stand"></div>
                     <div class="tv-base"></div>
                     <p class="tv-label">📺 Nishi's Memory Reel 📺</p>
+                    
+                    <!-- Pause/Resume Button - Below Display -->
+                    <div class="pause-resume-button" id="pauseResumeButton" style="display: none;">
+                        <button class="control-btn" id="controlBtn">
+                            <span id="pauseText">⏸️ Pause</span>
+                            <span id="resumeText" style="display: none;">▶️ Resume</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -108,8 +126,8 @@
             </div>
         </div>
 
-        <!-- Birthday Poem Section -->
-        <div class="poem-section">
+        <!-- Birthday Poem Section - Hidden initially -->
+        <div class="poem-section" id="poemSection" style="display: none;">
             <div class="birthday-poem">
                 <h2>🌸 Birthday Poem for Nishi 🌸</h2>
                 <div class="poem-content">

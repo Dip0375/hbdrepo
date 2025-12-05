@@ -1,42 +1,38 @@
 // Auto-load photos from slideshow folder
 // Supported formats: jpg, jpeg, png, gif, webp
-// Now supports up to 20 images!
+// Optimized to check only existing files
 const slideshowImageNames = [
-    '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg',
-    '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg',
-    '1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg',
-    '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg', '20.jpeg',
-    '1.png', '2.png', '3.png', '4.png', '5.png', '6.png', '7.png', '8.png', '9.png', '10.png',
-    '11.png', '12.png', '13.png', '14.png', '15.png', '16.png', '17.png', '18.png', '19.png', '20.png',
-    '1.gif', '2.gif', '3.gif', '4.gif', '5.gif', '6.gif', '7.gif', '8.gif', '9.gif', '10.gif',
-    '1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.webp', '8.webp', '9.webp', '10.webp'
+    '1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.webp', '8.webp', '9.webp', '10.webp', '11.webp',
+    '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg', '8.jpg', '9.jpg', '10.jpg', '11.jpg'
 ];
 
 let photos = [];
 let photosLoaded = false;
 
-// Function to load photos from slideshow folder
+// Function to load photos from slideshow folder - Optimized
 async function loadPhotosFromFolder() {
     const loadedPhotos = [];
     
-    // Try to load each possible image
-    for (const imageName of slideshowImageNames) {
+    // Use Promise.allSettled for parallel loading (faster)
+    const promises = slideshowImageNames.map(imageName => {
         const imagePath = `slideshow/${imageName}`;
-        
-        try {
-            // Check if image exists by trying to load it
-            const exists = await checkImageExists(imagePath);
-            if (exists) {
-                loadedPhotos.push({
-                    src: imagePath,
-                    caption: `📸 Memory ${loadedPhotos.length + 1}`,
-                    emoji: '📷'
-                });
-            }
-        } catch (error) {
-            // Image doesn't exist, continue
+        return checkImageExists(imagePath).then(exists => ({
+            exists,
+            path: imagePath
+        }));
+    });
+    
+    const results = await Promise.allSettled(promises);
+    
+    results.forEach((result, index) => {
+        if (result.status === 'fulfilled' && result.value.exists) {
+            loadedPhotos.push({
+                src: result.value.path,
+                caption: '',  // No caption
+                emoji: '📷'
+            });
         }
-    }
+    });
     
     // Add the birthday wish slide at the end
     loadedPhotos.push({ src: '', caption: '', emoji: '', isWishSlide: true });
@@ -48,12 +44,24 @@ async function loadPhotosFromFolder() {
     return photos;
 }
 
-// Check if image exists
+// Check if image exists - Optimized with timeout
 function checkImageExists(url) {
     return new Promise((resolve) => {
         const img = new Image();
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
+        const timeout = setTimeout(() => {
+            img.onload = null;
+            img.onerror = null;
+            resolve(false);
+        }, 2000); // 2 second timeout
+        
+        img.onload = () => {
+            clearTimeout(timeout);
+            resolve(true);
+        };
+        img.onerror = () => {
+            clearTimeout(timeout);
+            resolve(false);
+        };
         img.src = url;
     });
 }
@@ -124,7 +132,8 @@ class FloatingHeart {
 }
 
 let hearts = [];
-for (let i = 0; i < 20; i++) {
+// Start with fewer hearts for faster initial load
+for (let i = 0; i < 10; i++) {
     hearts.push(new FloatingHeart());
 }
 
@@ -187,21 +196,15 @@ async function createSlideshow() {
             const img = document.createElement('img');
             img.src = photo.src;
             img.alt = photo.caption;
+            img.loading = 'lazy'; // Lazy load images for better performance
             
             img.onerror = function() {
                 // If image fails to load, show emoji placeholder
                 slide.innerHTML = `<div class="slide-placeholder">${photo.emoji}</div>`;
-                const caption = document.createElement('div');
-                caption.className = 'slide-caption';
-                caption.textContent = photo.caption;
-                slide.appendChild(caption);
             };
             
             img.onload = function() {
-                const caption = document.createElement('div');
-                caption.className = 'slide-caption';
-                caption.textContent = photo.caption;
-                slide.appendChild(caption);
+                // No caption added
             };
             
             slide.appendChild(img);
@@ -220,6 +223,7 @@ function setupPlayButton() {
     const pauseResumeButton = document.getElementById('pauseResumeButton');
     const rightSection = document.querySelector('.right-section');
     const scrollIndicator = document.querySelector('.scroll-indicator');
+    const mainContainer = document.getElementById('mainContainer');
     
     playButton.addEventListener('click', () => {
         if (!slideshowStarted) {
@@ -239,6 +243,37 @@ function setupPlayButton() {
             
             // Start music when play button is clicked
             initBackgroundMusic();
+            
+            // Remove centered class to show two-column layout with smooth transition
+            setTimeout(() => {
+                mainContainer.classList.remove('centered');
+            }, 300);
+            
+            // Show Birthday Header with animation
+            const birthdayHeader = document.getElementById('birthdayHeader');
+            birthdayHeader.style.display = 'block';
+            setTimeout(() => {
+                birthdayHeader.style.opacity = '0';
+                birthdayHeader.style.transform = 'translateY(-50px)';
+                birthdayHeader.style.transition = 'opacity 1s ease, transform 1s ease';
+                setTimeout(() => {
+                    birthdayHeader.style.opacity = '1';
+                    birthdayHeader.style.transform = 'translateY(0)';
+                }, 50);
+            }, 100);
+            
+            // Show Birthday Poem with animation
+            const poemSection = document.getElementById('poemSection');
+            poemSection.style.display = 'block';
+            setTimeout(() => {
+                poemSection.style.opacity = '0';
+                poemSection.style.transform = 'translateY(50px)';
+                poemSection.style.transition = 'opacity 1s ease, transform 1s ease';
+                setTimeout(() => {
+                    poemSection.style.opacity = '1';
+                    poemSection.style.transform = 'translateY(0)';
+                }, 50);
+            }, 500);
             
             // Show the cake with animation
             rightSection.style.display = 'flex';
@@ -265,27 +300,27 @@ function setupPlayButton() {
 
 // Setup Pause/Resume Button
 function setupPauseResumeButton() {
-    const pauseResumeButton = document.getElementById('pauseResumeButton');
-    const pauseIcon = document.getElementById('pauseIcon');
-    const resumeIcon = document.getElementById('resumeIcon');
+    const controlBtn = document.getElementById('controlBtn');
+    const pauseText = document.getElementById('pauseText');
+    const resumeText = document.getElementById('resumeText');
     
-    pauseResumeButton.addEventListener('click', () => {
+    controlBtn.addEventListener('click', () => {
         if (!slideshowPaused) {
             // Pause slideshow
             pauseSlideshow();
             slideshowPaused = true;
             
-            // Switch to resume icon
-            pauseIcon.style.display = 'none';
-            resumeIcon.style.display = 'block';
+            // Switch to resume text
+            pauseText.style.display = 'none';
+            resumeText.style.display = 'inline';
         } else {
             // Resume slideshow
             resumeSlideshow();
             slideshowPaused = false;
             
-            // Switch to pause icon
-            pauseIcon.style.display = 'block';
-            resumeIcon.style.display = 'none';
+            // Switch to pause text
+            pauseText.style.display = 'inline';
+            resumeText.style.display = 'none';
         }
     });
 }
@@ -409,18 +444,83 @@ function addMusicControl() {
     document.body.appendChild(musicBtn);
 }
 
+// Verification System
+const verificationQuestions = [
+    { question: "What is 5 + 3?", answer: 8, options: [6, 7, 8, 9] },
+    { question: "What is 10 - 4?", answer: 6, options: [5, 6, 7, 8] },
+    { question: "What is 3 × 4?", answer: 12, options: [10, 11, 12, 13] },
+    { question: "What is 15 ÷ 3?", answer: 5, options: [3, 4, 5, 6] },
+    { question: "How many days in a week?", answer: 7, options: [5, 6, 7, 8] },
+    { question: "How many months in a year?", answer: 12, options: [10, 11, 12, 13] }
+];
+
+function setupVerification() {
+    const verificationScreen = document.getElementById('verificationScreen');
+    const questionEl = document.getElementById('verificationQuestion');
+    const optionsEl = document.getElementById('verificationOptions');
+    
+    // Pick a random question
+    const randomQuestion = verificationQuestions[Math.floor(Math.random() * verificationQuestions.length)];
+    
+    questionEl.textContent = randomQuestion.question;
+    
+    // Shuffle options
+    const shuffledOptions = [...randomQuestion.options].sort(() => Math.random() - 0.5);
+    
+    // Create option buttons
+    shuffledOptions.forEach(option => {
+        const optionBtn = document.createElement('div');
+        optionBtn.className = 'verification-option';
+        optionBtn.textContent = option;
+        
+        optionBtn.addEventListener('click', () => {
+            if (option === randomQuestion.answer) {
+                // Correct answer
+                optionBtn.classList.add('correct');
+                
+                setTimeout(() => {
+                    verificationScreen.classList.add('fade-out');
+                    setTimeout(() => {
+                        verificationScreen.style.display = 'none';
+                        showMainContent();
+                    }, 500);
+                }, 800);
+            } else {
+                // Wrong answer
+                optionBtn.classList.add('wrong');
+                setTimeout(() => {
+                    optionBtn.classList.remove('wrong');
+                }, 500);
+            }
+        });
+        
+        optionsEl.appendChild(optionBtn);
+    });
+}
+
+function showMainContent() {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.classList.remove('hidden');
+    
+    // Add centered class to main container initially
+    const mainContainer = document.getElementById('mainContainer');
+    mainContainer.classList.add('centered');
+    
+    createSlideshow(); // Create slideshow with play button
+    setupCandleAnimations(); // Setup enhanced candle animations
+}
+
 // Start Screen Click Handler
 const startScreen = document.getElementById('startScreen');
-const mainContent = document.getElementById('mainContent');
+const verificationScreen = document.getElementById('verificationScreen');
 
 startScreen.addEventListener('click', () => {
     startScreen.classList.add('fade-out');
     
     setTimeout(() => {
         startScreen.style.display = 'none';
-        mainContent.classList.remove('hidden');
-        createSlideshow(); // Create slideshow with play button
-        setupCandleAnimations(); // Setup enhanced candle animations
+        verificationScreen.style.display = 'flex';
+        setupVerification();
     }, 500);
 });
 
@@ -632,3 +732,18 @@ window.addEventListener('resize', () => {
 
 // Initialize
 animate();
+
+// Hide loading screen when page is ready
+window.addEventListener('DOMContentLoaded', () => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const startScreen = document.getElementById('startScreen');
+    
+    // Minimum loading time for smooth transition (500ms)
+    setTimeout(() => {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            startScreen.style.display = 'flex';
+        }, 500);
+    }, 500);
+});
