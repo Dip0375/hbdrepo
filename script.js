@@ -482,7 +482,7 @@ function setupVerification() {
                     verificationScreen.classList.add('fade-out');
                     setTimeout(() => {
                         verificationScreen.style.display = 'none';
-                        showMainContent();
+                        showCountdown();
                     }, 500);
                 }, 800);
             } else {
@@ -496,6 +496,166 @@ function setupVerification() {
         
         optionsEl.appendChild(optionBtn);
     });
+}
+
+async function showCountdown() {
+    const countdownScreen = document.getElementById('countdownScreen');
+    const timerElement = document.getElementById('countdownTimer');
+    const progressBar = document.getElementById('progressBar');
+    const messageElement = document.querySelector('.countdown-message');
+    const skipButton = document.getElementById('skipButton');
+    
+    countdownScreen.style.display = 'flex';
+    timerElement.textContent = 'Fetching time...';
+    
+    // Skip button functionality
+    let countdownInterval;
+    skipButton.addEventListener('click', () => {
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+        countdownScreen.classList.add('fade-out');
+        setTimeout(() => {
+            countdownScreen.style.display = 'none';
+            showMainContent();
+        }, 500);
+    });
+    
+    try {
+        // Fetch current time from WorldTimeAPI
+        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Kolkata');
+        const data = await response.json();
+        
+        // Get current time from API
+        const currentTime = new Date(data.datetime);
+        let hours = currentTime.getHours();
+        let minutes = currentTime.getMinutes();
+        let seconds = currentTime.getSeconds();
+        
+        // Calculate target time (midnight 00:00:00)
+        const targetTime = new Date(currentTime);
+        targetTime.setHours(24, 0, 0, 0); // Target: Next midnight (00:00:00)
+        
+        // Calculate total seconds until midnight
+        const totalSecondsToMidnight = Math.floor((targetTime - currentTime) / 1000);
+        let elapsedSeconds = 0;
+        
+        messageElement.textContent = `Counting to midnight... 🌙`;
+        
+        countdownInterval = setInterval(() => {
+            seconds++;
+            elapsedSeconds++;
+            
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+            }
+            
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+            
+            if (hours >= 24) {
+                hours = 0;
+            }
+            
+            // Format time display
+            const displayHours = String(hours).padStart(2, '0');
+            const displayMinutes = String(minutes).padStart(2, '0');
+            const displaySeconds = String(seconds).padStart(2, '0');
+            
+            timerElement.textContent = `${displayHours}:${displayMinutes}:${displaySeconds}`;
+            
+            // Update progress bar
+            const progress = (elapsedSeconds / totalSecondsToMidnight) * 100;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+            
+            // Check if reached midnight (00:00:00)
+            if (hours === 0 && minutes === 0 && seconds === 0) {
+                clearInterval(countdownInterval);
+                
+                // Celebration effect
+                timerElement.textContent = '00:00:00';
+                timerElement.style.color = '#00ff00';
+                timerElement.style.transform = 'scale(1.2)';
+                messageElement.textContent = '🎉 It\'s Time! 🎉';
+                
+                setTimeout(() => {
+                    countdownScreen.classList.add('fade-out');
+                    setTimeout(() => {
+                        countdownScreen.style.display = 'none';
+                        showMainContent();
+                    }, 500);
+                }, 1500);
+            }
+        }, 1000); // Update every second
+        
+    } catch (error) {
+        console.error('Error fetching time:', error);
+        
+        // Fallback: Use local system time
+        timerElement.textContent = 'Using local time...';
+        messageElement.textContent = 'Using your device time';
+        
+        setTimeout(() => {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            
+            const targetTime = new Date(now);
+            targetTime.setHours(24, 0, 0, 0); // Next midnight
+            
+            const totalSecondsToMidnight = Math.floor((targetTime - now) / 1000);
+            let elapsedSeconds = 0;
+            
+            countdownInterval = setInterval(() => {
+                seconds++;
+                elapsedSeconds++;
+                
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+                
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+                
+                if (hours >= 24) {
+                    hours = 0;
+                }
+                
+                const displayHours = String(hours).padStart(2, '0');
+                const displayMinutes = String(minutes).padStart(2, '0');
+                const displaySeconds = String(seconds).padStart(2, '0');
+                
+                timerElement.textContent = `${displayHours}:${displayMinutes}:${displaySeconds}`;
+                
+                const progress = (elapsedSeconds / totalSecondsToMidnight) * 100;
+                progressBar.style.width = `${Math.min(progress, 100)}%`;
+                
+                if (hours === 0 && minutes === 0 && seconds === 0) {
+                    clearInterval(countdownInterval);
+                    
+                    timerElement.textContent = '00:00:00';
+                    timerElement.style.color = '#00ff00';
+                    timerElement.style.transform = 'scale(1.2)';
+                    messageElement.textContent = '🎉 It\'s Time! 🎉';
+                    
+                    setTimeout(() => {
+                        countdownScreen.classList.add('fade-out');
+                        setTimeout(() => {
+                            countdownScreen.style.display = 'none';
+                            showMainContent();
+                        }, 500);
+                    }, 1500);
+                }
+            }, 1000);
+        }, 1000);
+    }
 }
 
 function showMainContent() {
